@@ -24,6 +24,14 @@ browser -> server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/data.json
 browser --> server: [{ content: "user's text", date: "date submitted" }, ...]
 
 note over browser:
-form is submitted to the json and after that the page refreshes
-and the sequence diagram executes again from the top down
+form is submitted to the json
+end note
+
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{ content: "user's text", date: "date submitted" }, ...]
+
+note over browser:
+browser requests the JSON data from server which is 
+now updated with the users input
 end note
