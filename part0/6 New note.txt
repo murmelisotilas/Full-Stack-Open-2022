@@ -1,0 +1,48 @@
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server-->browser: HTML-code
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server-->browser: main.js
+
+note over browser:
+browser starts executing js-code
+that requests JSON data from server 
+end note
+
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
+
+note over browser:
+browser executes the event handler
+that renders notes to display
+end note
+
+
+
+
+
+note over browser:
+form is submitted to the json
+end note
+
+browser <-> server: document.getElementById('notes_form')
+
+note over browser:
+javascript command instructs the code to fetch the form-element 
+from the page, and to register an event handler to handle the 
+form submit event
+end note
+
+note over browser:
+e.preventDefault() in js prevents th default handling (GET  request)
+end note
+
+browser -> server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/data.json
+browser --> server: [{ content: "user's text", date: "date submitted" }, ...]
+
+note over browser:
+Then the event handler creates a new note, adds it to the notes
+list with the command notes.push(note), rerenders the note list
+on the page and sends the new note to the server.
+end note
