@@ -37,7 +37,6 @@ const App = () => {
       )
     }
     return(
-    
         <table>
           <PreStatistics text="good" value={good}/>
           <PreStatistics text="neutral" value={neutral}/>
