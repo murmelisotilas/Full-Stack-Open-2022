@@ -48,11 +48,13 @@ const App = () => {
     event.preventDefault()
     const currentPerson = persons.filter((person) => person.name === newPerson);
 
+    const nameObject = {
+      name: newPerson,
+      number: newNumber,
+    }
+
     if (currentPerson.length === 0) {
-      const nameObject = {
-        name: newPerson,
-        number: newNumber,
-      }
+      
       fileService
         .create(nameObject)
         .then(returnedPerson => {
@@ -62,7 +64,19 @@ const App = () => {
         .catch((error) => alert(error.response.data.error))
     } 
     else {
-      alert(`${newPerson} is already added to phonebook`)
+      if(window.confirm(`${newPerson} is already added to phonebook, replace the old number with a new one`)){
+        fileService
+          .update(currentPerson[0].id, nameObject)
+          .then((response) => {
+            setPersons(persons.map((person) =>
+            person.id !== response.id ? person : response
+          ))
+            setPersonsToShow(persons.map((person) =>
+            person.id !== response.id ? person : response
+          ))
+          })
+      }
+      
     }
     setNewPerson('')
     setNewNumber('')
