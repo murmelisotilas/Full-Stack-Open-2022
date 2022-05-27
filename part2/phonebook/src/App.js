@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import React from 'react'
-import axios from 'axios'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import Person from './components/Person'
+import fileService from './services/communication'
 
 
 const App = () => {
@@ -14,13 +14,28 @@ const App = () => {
   const [personsToShow, setPersonsToShow] = useState(persons)
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3010/persons')
-      .then(response => {
+    fileService
+      .getAll()
+      .then((initialPersons) => {
         console.log('received')
-        setPersons(response.data)
+        setPersons(initialPersons)
+        setPersonsToShow(initialPersons)
       })
   }, [])
+
+
+  const handleDeletion = (id, name) => {
+    if (window.confirm(`Delete ${name}`)){
+      fileService
+        .deletion(id)
+        .then((response) => {
+          const updatePersons = persons.filter((person) => person.id !== id)
+          setPersons(updatePersons)
+          setPersonsToShow(updatePersons)
+        })
+        .catch((error) => alert(error.response.data.error))
+    }
+  }
 
   const handleNameChange = (event) => {
     setNewPerson(event.target.value)
@@ -38,8 +53,13 @@ const App = () => {
         name: newPerson,
         number: newNumber,
       }
-      setPersons(persons.concat(nameObject))
-      setPersonsToShow(persons.concat(nameObject))
+      fileService
+        .create(nameObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setPersonsToShow(persons.concat(returnedPerson))
+        })
+        .catch((error) => alert(error.response.data.error))
     } 
     else {
       alert(`${newPerson} is already added to phonebook`)
@@ -66,7 +86,7 @@ const App = () => {
       newNumber={newNumber} 
       handleNumberChange={handleNumberChange}/>
       <h2>Numbers</h2>
-      <Person personsToShow={personsToShow}/>
+      <Person personsToShow={personsToShow} handleDeletion={handleDeletion}/>
     </div>
   )
 }
