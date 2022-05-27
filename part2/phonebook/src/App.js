@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
+import './index.css'
 import React from 'react'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import Person from './components/Person'
 import fileService from './services/communication'
+import Notification from './services/Notification'
 
 
 const App = () => {
@@ -12,6 +14,12 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [personsToShow, setPersonsToShow] = useState(persons)
+  const [message, setMessage] = useState(null)
+  const [state, setState] = useState(1)
+  
+
+  
+
 
   useEffect(() => {
     fileService
@@ -33,7 +41,6 @@ const App = () => {
           setPersons(updatePersons)
           setPersonsToShow(updatePersons)
         })
-        .catch((error) => alert(error.response.data.error))
     }
   }
 
@@ -60,8 +67,19 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
           setPersonsToShow(persons.concat(returnedPerson))
+          setState(1)
+          setMessage(`Added ${newPerson}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
-        .catch((error) => alert(error.response.data.error))
+        .catch((error) => {
+          setState(0)
+          setMessage(`${newPerson} was already removed from the server`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        })
     } 
     else {
       if(window.confirm(`${newPerson} is already added to phonebook, replace the old number with a new one`)){
@@ -75,9 +93,15 @@ const App = () => {
             person.id !== response.id ? person : response
           ))
           })
-      }
-      
+          .catch((error) => {
+            setState(0)
+            setMessage(`${newPerson} was already removed from the server`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+      })
     }
+  }
     setNewPerson('')
     setNewNumber('')
   }
@@ -90,6 +114,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={message} state={state}/> 
       <h2>Phonebook</h2>
        <Filter filter={filter} Filtration= {Filtration}/>
       <h2>add a new</h2>
