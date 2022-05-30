@@ -21,4 +21,4 @@ const update = (id, newFile) => {
     return request.then((response) => response.data)
 }
 
-export default { getAll, create,update ,deletion }
+export default { getAll, create, update ,deletion }
