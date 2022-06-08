@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import { useState, useEffect, useRef } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/logins'
 import Notification from './services/Notification'
@@ -7,6 +6,7 @@ import AddMessage from './services/AddNotification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
+import Blog from './components/Blog'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -87,18 +87,59 @@ const App = () => {
     }
 } */
 
-const addBlog = (blog) => {
-  blogService
-    .create(blog)
-    .then(returnedBlog => {
+  const compareNumbers = (a, b) => {
+    const aa = a.likes
+    const bb = b.likes
+    return bb - aa
+  }
+
+  const addBlog = async (title, author, url) => {
+    const newBlog = {
+      title,
+      author,
+      url,
+    }
+    try {
+      blogService.setToken(user.token)
+      const returnedBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(returnedBlog))
       setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
       setTimeout(() => {
         setMessage(null)
       }, 5000)
+      setBlogTitle('')
+      setBlogAuthor('')
+      setBlogUrl('')
     }
-    )
-}
+    catch (exception) {
+      setErrorMessage('Title and author are required')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+
+  const updateBlog = async (id, blogNew) => {
+    try { 
+      console.log(id)
+      const updatedBlog = await blogService.update(id, blogNew)
+      const blogsUpdated = blogs.map(b => b.id !== id ? b : updatedBlog)
+      setMessage(`${blogNew.title} by ${blogNew.author} updated`)
+      setBlogs(blogsUpdated.sort(compareNumbers))
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    }
+    catch (exception) {
+      setErrorMessage('couldn\'t update blog')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+  
+    }
+  }
+
 
 
 
@@ -120,16 +161,7 @@ const logOutButton = () => {
   )
 }
 
-
-const showBlogs = () => (
-  <div>
-    <div>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
-    </div>
-  </div>
-)
+const blogFormRef = useRef()
 
 if (user === null) {
   return  (
@@ -150,13 +182,14 @@ if (user === null) {
   )
 }
   
+
   return (
     <div>
       <Notification message={errorMessage}/>
       <AddMessage message={message}/>
       <h2>blogs</h2>
       {logOutButton()}
-      <Togglable buttonLabel="add blog">
+      <Togglable buttonLabel="add blog" ref={blogFormRef}>
         <BlogForm
           blogTitle={blogTitle}
           blogAuthor={blogAuthor}
@@ -167,7 +200,17 @@ if (user === null) {
           createBlog={addBlog}
         />
       </Togglable>
-      {showBlogs()}
+      <div>
+        {blogs
+          .sort(compareNumbers)
+          .map(blog =>
+          <Blog 
+          key={blog.id} 
+          blog={blog} 
+          updateBlog={updateBlog}
+          /> 
+        )}
+      </div>
     </div>
   )
 }

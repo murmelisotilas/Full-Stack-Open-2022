@@ -16,15 +16,14 @@ const BlogForm = ({createBlog}) => {
     const handleBlogUrlChange = (event) => {
         setBlogUrl(event.target.value)
     }
-    
+     
     const handleBlogAdd = (event) => {
         event.preventDefault()
-        createBlog({
-            title: blogTitle,
-            author: blogAuthor,
-            url: blogUrl,
-        })
-
+        createBlog(
+            blogTitle,
+            blogAuthor,
+            blogUrl,
+        )
         setBlogTitle('')
         setBlogAuthor('')
         setBlogUrl('')
