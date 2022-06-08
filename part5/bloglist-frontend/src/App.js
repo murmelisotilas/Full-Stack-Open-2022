@@ -119,7 +119,23 @@ const App = () => {
     }
   }
 
-
+  const handleBlogDelete = async (id, blog) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      try {
+        await blogService.remove(id)
+        setBlogs(blogs.filter(b => b.id !== id))
+        setMessage(`${blog.title} by ${blog.author} removed`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      } catch (exception) {
+        setErrorMessage('Error removing blog')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      } 
+    }
+  }
   const updateBlog = async (id, blogNew) => {
     try { 
       console.log(id)
@@ -208,6 +224,8 @@ if (user === null) {
           key={blog.id} 
           blog={blog} 
           updateBlog={updateBlog}
+          handleBlogDelete={handleBlogDelete}
+          username={user.username}
           /> 
         )}
       </div>
