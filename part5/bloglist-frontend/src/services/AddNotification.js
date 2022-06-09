@@ -1,4 +1,4 @@
-const AddMessage = ({message}) => {
+const AddMessage = ({ message }) => {
     const style = {
         color: 'green',
         background: 'lightgrey',
@@ -7,17 +7,17 @@ const AddMessage = ({message}) => {
         borderRadius: 5,
         padding: 10,
         marginBottom: 10,
-      }
+    }
 
-      
-      if (message === null) {
+
+    if (message === null) {
         return null
-      }
-      return (
+    }
+    return (
         <div style={style}>
             {message}
         </div>
-      )
-    }
+    )
+}
 
-    export default AddMessage
+export default AddMessage

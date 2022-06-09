@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState } from 'react'
 
-const BlogForm = ({createBlog}) => {
+const BlogForm = ({ createBlog }) => {
     const [blogTitle, setBlogTitle] = useState('')
     const [blogAuthor, setBlogAuthor] = useState('')
     const [blogUrl, setBlogUrl] = useState('')
@@ -16,7 +16,7 @@ const BlogForm = ({createBlog}) => {
     const handleBlogUrlChange = (event) => {
         setBlogUrl(event.target.value)
     }
-     
+
     const handleBlogAdd = (event) => {
         event.preventDefault()
         createBlog(
@@ -30,39 +30,39 @@ const BlogForm = ({createBlog}) => {
     }
 
     return(
-    <div>
-        <h2>Create new blog</h2>
-        <form onSubmit={handleBlogAdd}>
-          <div>
+        <div>
+            <h2>Create new blog</h2>
+            <form onSubmit={handleBlogAdd}>
+                <div>
             title
-          <input
-            type="text"
-            value={blogTitle}
-            name="Title"
-            onChange={handleBlogTitleChange}
-            />
-          </div>
-          <div>
+                    <input
+                        type="text"
+                        value={blogTitle}
+                        name="Title"
+                        onChange={handleBlogTitleChange}
+                    />
+                </div>
+                <div>
             author
-          <input
-            type="text"
-            value={blogAuthor}
-            name="Author"
-            onChange={handleBlogAuthorChange}
-            />
-          </div>
-          <div>
+                    <input
+                        type="text"
+                        value={blogAuthor}
+                        name="Author"
+                        onChange={handleBlogAuthorChange}
+                    />
+                </div>
+                <div>
             url
-          <input
-            type="text"
-            value={blogUrl}
-            name="Url"
-            onChange={handleBlogUrlChange}
-            />
-          </div>
-          <button type="submit">save</button>
-        </form>
-    </div>
+                    <input
+                        type="text"
+                        value={blogUrl}
+                        name="Url"
+                        onChange={handleBlogUrlChange}
+                    />
+                </div>
+                <button type="submit">save</button>
+            </form>
+        </div>
     )
 }
 
