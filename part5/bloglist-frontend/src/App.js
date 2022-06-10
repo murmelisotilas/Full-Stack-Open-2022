@@ -110,7 +110,6 @@ const App = () => {
     }
     const updateBlog = async (id, blogNew) => {
         try {
-            console.log(id)
             const updatedBlog = await blogService.update(id, blogNew)
             const blogsUpdated = blogs.map(b => b.id !== id ? b : updatedBlog)
             setMessage(`${blogNew.title} by ${blogNew.author} updated`)

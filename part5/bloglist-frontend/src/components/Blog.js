@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Blog = ({ blog, updateBlog, handleBlogDelete, username }) => {
+const Blog = ({ blog, updateBlog, handleBlogDelete, username, mockHandler }) => {
 
     const [visible, setVisible] = useState(false)
 
@@ -9,6 +9,18 @@ const Blog = ({ blog, updateBlog, handleBlogDelete, username }) => {
         setVisible(!visible)
     }
 
+    const trulyToggleVisibility = () => {
+        if (mockHandler === undefined) {
+            return(
+                toggleVisibility()
+            )
+        }
+        else {
+            return(
+                mockHandler
+            )
+        }
+    }
 
     const handleLike = async (event) => {
         event.preventDefault()
@@ -41,19 +53,19 @@ const Blog = ({ blog, updateBlog, handleBlogDelete, username }) => {
         <div style={blogStyle}>
             <div>
                 <div>
-                    <p>{blog.title}</p>
-                    <p>{blog.author}</p>
+                    <p className='testTitle'>{blog.title}</p>
+                    <p className='testAuthor'>{blog.author}</p>
                 </div>
-                <button onClick={toggleVisibility}>{visible ? 'hide' : 'show'}</button>
+                <button onClick={trulyToggleVisibility}>{visible ? 'hide' : 'show'}</button>
             </div>
             {visible && (
                 <div>
-                    <p>{blog.url}</p>
+                    <p className='testUrl'>{blog.url}</p>
                     <div>
-                        <span>{blog.likes} likes</span>
+                        <span className='testLikes'>{blog.likes} likes</span>
                         <button onClick={handleLike}>like</button>
                     </div>
-                    <p>{blog.user.name}</p>
+                    <p className='testName'>{blog.user.name}</p>
                     {
                         blog.user.username === username && (
 
