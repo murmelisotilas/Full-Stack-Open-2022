@@ -2,16 +2,12 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link
 } from 'react-router-dom'
-
-
 import { useState } from 'react'
 import { About } from './components/About'
 import { AnecdoteList } from './components/AnecdoteList'
 import { Footer } from './components/Footer'
 import { CreateNew } from './components/CreateNew'
 import { SpesifiedAnecdote } from './components/Anecdote'
-
-
 
 const App = () => {
   const [notification, setNotification] = useState('')
@@ -65,7 +61,6 @@ const padding = {
       </div>
 
       <Routes>
-
         <Route path="/:id" element={<SpesifiedAnecdote anecdotes={anecdotes}/>} />
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes}/>} />
         <Route path="/create" element={<CreateNew addNew={addNew} />} />
